@@ -1,0 +1,245 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <!-- Page heading and description -->
+    <h1><br>Hometown Highlights</h1>
+    <h5>Discover small, local businesses in your area that offer great services and products in all sorts of departments: food, retail, services, etc. Discover great deals to help you make shopping local and affordable.</h5>
+
+    <!-- Recommended Businesses Section -->
+    <div class="recommendations">
+        <h3 class="mt-5">Recommended Businesses</h3>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            {% for rec in recommendations %}
+                <div class="col">
+                    <div class="card h-100 business-card">
+                        <!-- Business image, shown only if it exists -->
+                        {% if rec.image %}
+                            <img src="{{ url_for('static', filename=rec.image) }}" class="card-img-top" alt="{{ rec.name }}">
+                        {% endif %}
+
+                        <!-- Business details -->
+                        <div class="card-body">
+                            <h5 class="card-title">{{ rec.name }}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted"><strong>Category:</strong> {{ rec.category }}</h6>
+
+                            <!-- Rating display -->
+                            {% if rec.rating_avg %}
+                                <div class="mb-1">
+                                    <strong>Rating:</strong>
+                                    <span class="star-rating" title="{{ rec.rating_avg|round(2) }} ({{ rec.rating_count }} reviews)">
+                                        <span class="star-rating-back">★★★★★</span>
+                                        <span class="star-rating-front" style="width:{{ rec.rating_pct|round(2) }}%">★★★★★</span>
+                                    </span>
+                                    <small class="text-muted ms-2">({{ rec.rating_count }} review{% if rec.rating_count != 1 %}s{% endif %})</small>
+                                </div>
+                            {% else %}
+                                <p class="mb-1"><strong>Rating:</strong> N/A</p>
+                            {% endif %}
+
+                            <!-- Address and description -->
+                            <p class="mb-1"><strong>Address:</strong> {{ rec.address }}</p>
+                            <p class="card-text mt-2">{{ rec.description }}</p>
+
+                            <!-- Deals badge, if any -->
+                            {% if rec.deals %}
+                                <p class="badge bg-success mt-2">Deal: {{ rec.deals }}</p>
+                            {% endif %}
+                        </div>
+
+                        <!-- Card footer with user actions -->
+                        <div class="card-footer bg-white border-top-0">
+                            <div class="d-flex gap-2">
+                                <!-- Favorite button -->
+                                <form method="POST" action="{{ url_for('toggle_favorite') }}" class="d-inline">
+                                    <input type="hidden" name="business_id" value="{{ rec.id }}">
+                                    {% if session.get('user_id') and rec.id in (favorite_ids or []) %}
+                                        <button type="submit" class="btn btn-sm btn-primary" name="add_favorite" value="1">Favorited</button>
+                                    {% else %}
+                                        <button type="submit" class="btn btn-sm btn-outline-secondary" name="add_favorite" value="1">Favorite</button>
+                                    {% endif %}
+                                </form>
+
+                                <!-- Other action buttons -->
+                                <a href="{{ url_for('add_review', business_id=rec.id) }}" class="btn btn-sm btn-outline-secondary">Add Review</a>
+                                <a href="{{ url_for('track_click', business_id=rec.id) }}" class="btn btn-sm btn-outline-info">View Reviews</a>
+                                <a href="{{ url_for('business_deals', business_id=rec.id) }}" class="btn btn-sm btn-outline-success">View Deals</a>
+                                {% if is_admin %}
+                                    <a href="{{ url_for('add_deal', business_id=rec.id) }}" class="btn btn-sm btn-outline-warning">Add Deal</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <br>
+    
+    <!-- Search bar for finding businesses -->
+    <form method="GET" action="{{ url_for('home') }}">
+        <div class="search-bar">
+            <input type="search" id="search" name="search" placeholder="Search for hometown highlights..." />
+            <button type="submit">Search</button>
+        </div>
+    </form>
+        
+    <br>
+
+    <!-- Category filter dropdown -->
+    <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Filter by Category
+        </button> 
+        <ul class="dropdown-menu">
+            <!-- Each category option submits a form to filter results -->
+            <li>
+                <form method="POST" action="{{ url_for('home') }}">
+                    <input type="hidden" name="category" value="All">
+                    <button type="submit" class="dropdown-item">All</button>
+                </form>
+            </li>
+            <li>
+                <form method="POST" action="{{ url_for('home') }}">
+                    <input type="hidden" name="category" value="Food &amp; Beverage">
+                    <button type="submit" class="dropdown-item">Food &amp; Beverage</button>
+                </form>
+            </li>
+            <li>
+                <form method="POST" action="{{ url_for('home') }}">
+                    <input type="hidden" name="category" value="Retail">
+                    <button type="submit" class="dropdown-item">Retail</button>
+                </form>
+            </li>
+            <li>
+                <form method="POST" action="{{ url_for('home') }}">
+                    <input type="hidden" name="category" value="Services">
+                    <button type="submit" class="dropdown-item">Services</button>
+                </form>
+            </li>
+            <li>
+                <form method="POST" action="{{ url_for('home') }}">
+                    <input type="hidden" name="category" value="Health &amp; Wellness">
+                    <button type="submit" class="dropdown-item">Health &amp; Wellness</button>
+                </form>
+            </li>
+            <li>
+                <form method="POST" action="{{ url_for('home') }}">
+                    <input type="hidden" name="category" value="Entertainment">
+                    <button type="submit" class="dropdown-item">Entertainment</button>
+                </form>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Sorting dropdown -->
+    <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Sort by...
+        </button> 
+        <ul class="dropdown-menu">
+            <!-- Each option sorts results based on the chosen criterion -->
+            <li>
+                <form method="POST" action="{{ url_for('home') }}">
+                    <input type="hidden" name="sort_by" value="Highest Rating">
+                    <button type="submit" class="dropdown-item">Rating (H -> L)</button>
+                </form>
+            </li>
+            <li>
+                <form method="POST" action="{{ url_for('home') }}">
+                    <input type="hidden" name="sort_by" value="Most Reviewed">
+                    <button type="submit" class="dropdown-item">Most Reviewed</button>
+                </form>
+            </li>
+            <li>
+                <form method="POST" action="{{ url_for('home') }}">
+                    <input type="hidden" name="sort_by" value="Newest">
+                    <button type="submit" class="dropdown-item">Launch Date</button>
+                </form>
+            </li>
+            <li>
+                <form method="POST" action="{{ url_for('home') }}">
+                    <input type="hidden" name="sort_by" value="Alphabetical">
+                    <button type="submit" class="dropdown-item">Alphabetical</button>
+                </form>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main list of local businesses -->
+    <h3>Local Businesses in Your Area</h3>
+    <div class="business_list container">
+        <h5 class="mb-3">Showing {{ items_count }} businesses</h5>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            {% for item in items %}
+                <div class="col">
+                    <div class="card h-100 business-card">
+                        <!-- Admin can delete businesses -->
+                        {% if is_admin %}
+                        <form method="POST" action="{{ url_for('delete_business', business_id=item.id) }}" class="delete-business-form">
+                            <button type="submit" class="delete-business-btn" title="Delete business">×</button>
+                        </form>
+                        {% endif %}
+
+                        <!-- Business image -->
+                        {% if item.image %}
+                            <img src="{{ url_for('static', filename=item.image) }}" class="card-img-top" alt="{{ item.name }}">
+                        {% endif %}
+
+                        <!-- Business info -->
+                        <div class="card-body">
+                            <h5 class="card-title">{{ item.name }}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted"><strong>Category: </strong>{{ item.category }}</h6>
+
+                            <!-- Rating display -->
+                            {% if item.rating_avg %}
+                                <div class="mb-1">
+                                    <strong>Rating:</strong>
+                                    <span class="star-rating" title="{{ item.rating_avg|round(2) }} ({{ item.rating_count }} reviews)">
+                                        <span class="star-rating-back">★★★★★</span>
+                                        <span class="star-rating-front" style="width:{{ item.rating_pct|round(2) }}%">★★★★★</span>
+                                    </span>
+                                    <small class="text-muted ms-2">({{ item.rating_count }} review{% if item.rating_count != 1 %}s{% endif %})</small>
+                                </div>
+                            {% else %}
+                                <p class="mb-1"><strong>Rating:</strong> N/A</p>
+                            {% endif %}
+
+                            <!-- Address and description -->
+                            <p class="mb-1"><strong>Address:</strong> {{ item.address }}</p>
+                            <p class="card-text mt-2">{{ item.description }}</p>
+
+                            <!-- Deals badge -->
+                            {% if item.deals %}
+                                <p class="badge bg-success mt-2">Deal: {{ item.deals }}</p>
+                            {% endif %}
+                        </div>
+
+                        <!-- Card footer with user actions -->
+                        <div class="card-footer bg-white border-top-0">
+                            <div class="d-flex gap-2">
+                                <!-- Favorite button -->
+                                <form method="POST" action="{{ url_for('toggle_favorite') }}" class="d-inline">
+                                    <input type="hidden" name="business_id" value="{{ item.id }}">
+                                    {% if session.get('user_id') and item.id in (favorite_ids or []) %}
+                                        <button type="submit" class="btn btn-sm btn-primary" name="add_favorite" value="1">Favorited</button>
+                                    {% else %}
+                                        <button type="submit" class="btn btn-sm btn-outline-secondary" name="add_favorite" value="1">Favorite</button>
+                                    {% endif %}
+                                </form>
+
+                                <!-- Other actions: add review, view reviews, view deals -->
+                                <a href="{{ url_for('add_review', business_id=item.id) }}" class="btn btn-sm btn-outline-secondary">Add Review</a>
+                                <a href="{{ url_for('track_click', business_id=item.id) }}" class="btn btn-sm btn-outline-info">View Reviews</a>
+                                <a href="{{ url_for('business_deals', business_id=item.id) }}" class="btn btn-sm btn-outline-success">View Deals</a>
+                                {% if is_admin %}
+                                    <a href="{{ url_for('add_deal', business_id=item.id) }}" class="btn btn-sm btn-outline-warning">Add Deal</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
