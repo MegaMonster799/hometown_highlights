@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Deals - Hometown Highlights{% endblock %}
+
+{% block content %}
+    {% if business %}
+        <h1>Deals for {{ business.name }}</h1>
+    {% else %}
+        <h1>Deals</h1>
+        <h5>Explore the latest deals in your hometown. Support local businesses while also getting great discounts!</h5>
+    {% endif %}
+
+    <div class="container mt-4">
+        {% if not deals %}
+            <p>No deals available.</p>
+        {% else %}
+            <div class="row">
+                {% for deal in deals %}
+                    <div class="col-12 col-sm-6 col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                {% if not business %}
+                                    <h5 class="card-title">{{ deal.business_name }}</h5>
+                                {% endif %}
+                                <p class="card-text">{{ deal.deal_description }}</p>
+                                <p class="mb-1"><strong>Deal Code:</strong> {{ deal.deal_code or '—' }}</p>
+                            </div>
+                            <div class="card-footer text-muted">
+                                Expires: {{ deal.deal_expiration or 'N/A' }}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
