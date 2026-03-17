@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Sign Up</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    </head>
+    <body>
+        <div class="container mt-4">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title">Sign Up for Hometown Highlights</h3>
+                            <form id="signup-form" method="POST" action="{{ url_for('signup') }}">
+                                {% if error %}
+                                    <div class="alert alert-danger">{{ error }}</div>
+                                {% endif %}
+                                {% if success %}
+                                    <div class="alert alert-success">{{ success }}</div>
+                                {% endif %}
+                                <div class="mb-2">
+                                    <label for="first_name" class="form-label">First Name <span class="text-danger">*</span></label>
+                                    <input type="text" id="first_name" name="first_name" class="form-control {% if invalid_fields and invalid_fields.get('first_name') %}is-invalid{% endif %}" required value="{{ form.first_name|default('') }}">
+                                </div>
+                                <div class="mb-2">
+                                    <label for="last_name" class="form-label">Last Name <span class="text-danger">*</span></label>
+                                    <input type="text" id="last_name" name="last_name" class="form-control {% if invalid_fields and invalid_fields.get('last_name') %}is-invalid{% endif %}" required value="{{ form.last_name|default('') }}">
+                                </div>
+                                <div class="mb-2">
+                                    <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+                                    <input type="email" id="email" name="email" class="form-control {% if invalid_fields and invalid_fields.get('email') %}is-invalid{% endif %}" required pattern="[^@]+@[^@]+\.[^@]+" value="{{ form.email|default('') }}">
+                                    <div class="invalid-feedback">Please enter a valid email address (example: name@example.com).</div>
+                                    {% if invalid_fields and invalid_fields.get('email') %}
+                                        <div class="invalid-feedback d-block">{{ error or 'Invalid email address.' }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="mb-2">
+                                    <label for="phone_number" class="form-label">Phone Number <span class="text-danger">*</span></label>
+                                    <input type="tel" id="phone_number" name="phone_number" class="form-control {% if invalid_fields and invalid_fields.get('phone_number') %}is-invalid{% endif %}" required inputmode="tel" pattern="[0-9\-\+\s()]{7,20}" placeholder="e.g. +1 555-555-5555" value="{{ form.phone_number|default('') }}">
+                                    <div class="invalid-feedback">Please enter a valid phone number (7–20 digits; may include +, -, spaces, parentheses).</div>
+                                    {% if invalid_fields and invalid_fields.get('phone_number') %}
+                                        <div class="invalid-feedback d-block">{{ error or 'Invalid phone number.' }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="mb-2">
+                                    <label for="username" class="form-label">Username <span class="text-danger">*</span></label>
+                                    <input type="text" id="username" name="username" class="form-control {% if invalid_fields and invalid_fields.get('username') %}is-invalid{% endif %}" required value="{{ form.username|default('') }}">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
+                                    <input type="password" id="password" name="password" class="form-control" required title="Minimum 6 characters">
+                                    <div id="password-help" class="form-text text-danger">Password must be at least 6 characters.</div>
+                                </div>
+                                {% if captcha_question %}
+                                    <div class="mb-3">
+                                        <label class="form-label">{{ captcha_question }}</label>
+                                        <input type="text" name="captcha" class="form-control" required placeholder="Enter the result">
+                                    </div>
+                                {% endif %}
+                                <div class="d-grid gap-2 col-8 mx-auto">
+                                    <button type="submit" class="btn btn-primary btn-sm btn-equal w-100">Sign Up</button>
+                                    <a href="{{ url_for('login') }}" class="btn btn-secondary btn-sm btn-equal w-100 text-center" role="button">Cancel</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- No reCAPTCHA: form submits directly -->
+
+        <script>
+        document.addEventListener('DOMContentLoaded', function(){
+            var pwd = document.getElementById('password');
+            var help = document.getElementById('password-help');
+            if (!pwd || !help) return;
+            function update(){
+                if (pwd.value && pwd.value.length >= 6) {
+                    help.style.display = 'none';
+                } else {
+                    help.style.display = 'block';
+                }
+            }
+            pwd.addEventListener('input', update);
+            update();
+        });
+        </script>
+        <script>
+        // Client-side semantic validation for signup form (live + on submit)
+        (function(){
+            var form = document.getElementById('signup-form');
+            if (!form) return;
+            var email = document.getElementById('email');
+            var phone = document.getElementById('phone_number');
+            var emailRe = /[^@]+@[^@]+\.[^@]+/;
+            var phoneRe = /^[0-9\-\+\s()]{7,20}$/;
+
+            function toggleInvalid(el, show) {
+                if (!el) return;
+                if (show) el.classList.add('is-invalid'); else el.classList.remove('is-invalid');
+            }
+
+            function validateField(el, re) {
+                if (!el) return true;
+                if (!el.value) return true; // required constraints handled by browser
+                return re.test(el.value);
+            }
+
+            if (email) {
+                email.addEventListener('input', function(){
+                    var ok = validateField(email, emailRe);
+                    toggleInvalid(email, !ok);
+                });
+                email.addEventListener('blur', function(){ toggleInvalid(email, !validateField(email, emailRe)); });
+            }
+            if (phone) {
+                phone.addEventListener('input', function(){
+                    var ok = validateField(phone, phoneRe);
+                    toggleInvalid(phone, !ok);
+                });
+                phone.addEventListener('blur', function(){ toggleInvalid(phone, !validateField(phone, phoneRe)); });
+            }
+
+            form.addEventListener('submit', function(e){
+                if (!form.checkValidity()) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    form.classList.add('was-validated');
+                    return false;
+                }
+                var okEmail = validateField(email, emailRe);
+                var okPhone = validateField(phone, phoneRe);
+                if (!okEmail || !okPhone) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    form.classList.add('was-validated');
+                    toggleInvalid(email, !okEmail);
+                    toggleInvalid(phone, !okPhone);
+                    if (!okEmail) email.focus(); else phone.focus();
+                    return false;
+                }
+            }, false);
+
+            // If server returned invalid_fields, ensure UI shows them
+            {% if invalid_fields %}
+            (function(){
+                try {
+                    var invalid = {{ invalid_fields|tojson }};
+                    form.classList.add('was-validated');
+                    if (invalid.email && email) toggleInvalid(email, true);
+                    if (invalid.phone_number && phone) toggleInvalid(phone, true);
+                    if (invalid.username) document.getElementById('username').classList.add('is-invalid');
+                } catch (e) { /* ignore */ }
+            })();
+            {% endif %}
+        })();
+        </script>
+    </body>
+</html>
