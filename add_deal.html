@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Add Deal</h3>
+                    {% if error %}
+                        <div class="alert alert-danger">{{ error }}</div>
+                    {% endif %}
+                    {% if success %}
+                        <div class="alert alert-success">{{ success }}</div>
+                    {% endif %}
+                    <form id="add-deal-form" method="POST" action="{{ url_for('add_deal', business_id=business_id) }}">
+                        {% if business %}
+                            <div class="mb-3 text-center">
+                                <label class="form-label">Business</label>
+                                <input type="text" class="form-control w-75 mx-auto" value="{{ business.name }}" readonly>
+                                <input type="hidden" name="business_id" value="{{ business.id }}">
+                            </div>
+                        {% else %}
+                            <div class="mb-3 text-center">
+                                <label for="business_id" class="form-label">Business ID (optional)</label>
+                                <input type="number" id="business_id" name="business_id" class="form-control w-50 mx-auto" placeholder="Enter business id to tie this deal">
+                            </div>
+                        {% endif %}
+
+                        <div class="mb-3 text-center">
+                            <label for="deal_description" class="form-label">Deal Description <span class="text-danger">*</span></label>
+                            <input type="text" id="deal_description" name="deal_description" class="form-control w-75 mx-auto" required>
+                        </div>
+
+                        <div class="mb-3 text-center">
+                            <label for="deal_code" class="form-label">Deal Code (optional)</label>
+                            <input type="text" id="deal_code" name="deal_code" class="form-control w-50 mx-auto">
+                        </div>
+
+                        <div class="mb-3 text-center">
+                            <label for="deal_expiration" class="form-label">Expiration</label>
+                            <input type="date" id="deal_expiration" name="deal_expiration" class="form-control w-50 mx-auto">
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Add Deal</button>
+                            <a href="{{ url_for('deals') }}" class="btn btn-secondary ms-2">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
