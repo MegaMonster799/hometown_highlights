@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}Help & Instructions{% endblock %}
+{% block content %}
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-8">
+      <h2 class="mb-3">Quick Start & Usage</h2>
+      <div class="card mb-3">
+        <div class="card-body">
+          <h5 class="card-title">Add a Business</h5>
+          <p class="card-text">Navigate to <a href="/add_business">Add Business</a>, complete the form and submit. reCAPTCHA v3 protects submissions.</p>
+        </div>
+      </div>
+
+      <div class="card mb-3">
+        <div class="card-body">
+          <h5 class="card-title">Interact & Review</h5>
+          <p class="card-text">Visit the <a href="/home">Home</a> page to view listings and recommendations. Clicking "View Reviews" records view/click analytics which improve recommendations.</p>
+        </div>
+      </div>
+
+      <div class="card mb-3">
+        <div class="card-body">
+          <h5 class="card-title">Admin Analytics</h5>
+          <p class="card-text">Judges can review recorded analytics at <a href="/admin/analytics">Admin Analytics</a>. This page is restricted to authorized admin users.</p>
+        </div>
+      </div>
+    </div>
+
+    <aside class="col-md-4">
+      <div class="card">
+        <div class="card-header">Accessibility & Tips</div>
+        <div class="card-body">
+          <ul>
+            <li>Keyboard accessible navigation via standard links.</li>
+            <li>Forms include server-side validation; error messages display on the page.</li>
+            <li>If reCAPTCHA blocks you during local testing, set test keys or run in dev mode.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card mt-3">
+        <div class="card-body">
+          <h6>For Judges</h6>
+          <p class="small">Use the Admin Analytics page to evaluate recommendation behavior. To allow a user to view this page locally, set the environment variable <code>ADMIN_USERS</code> to a comma-separated list of usernames (or add an <code>is_admin</code> column to the users table).</p>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
+{% endblock %}
