@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}Add Business{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Add New Business</h3>
+                    {% if error %}
+                        <div class="alert alert-danger">{{ error }}</div>
+                    {% endif %}
+                    {% if success %}
+                        <div class="alert alert-success">{{ success }}</div>
+                    {% endif %}
+                    <form id="add-business-form" method="POST" action="{{ url_for('add_business') }}">
+                        <div class="mb-3 text-center">
+                            <label for="name" class="form-label">Business Name <span class="text-danger">*</span></label>
+                            <input type="text" id="name" name="name" class="form-control w-75 mx-auto" required>
+                        </div>
+                        <div class="mb-3 text-center">
+                            <label for="category" class="form-label">Category <span class="text-danger">*</span></label>
+                            <select id="category" name="category" class="form-control w-75 mx-auto" required>
+                                <option value="Food & Beverage">Food & Beverage</option>
+                                <option value="Retail">Retail</option>
+                                <option value="Services">Services</option>
+                                <option value="Health & Wellness">Health & Wellness</option>
+                                <option value="Entertainment">Entertainment</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Address <span class="text-danger">*</span></label>
+                            <input type="text" id="address" name="address" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description <span class="text-danger">*</span></label>
+                            <textarea id="description" name="description" class="form-control" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="deals" class="form-label">Deals</label>
+                            <input type="text" id="deals" name="deals" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="deal_code" class="form-label">Deal Code</label>
+                            <input type="text" id="deal_code" name="deal_code" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="deal_expiration" class="form-label">Deal Expiration Date</label>
+                            <input type="date" id="deal_expiration" name="deal_expiration" class="form-control">
+                        </div>
+                        {% if captcha_question %}
+                            <div class="mb-3 text-center">
+                                <label id="captcha-label" class="form-label">{{ captcha_question }}</label>
+                                <input type="text" id="captcha-input" name="captcha" class="form-control w-50 mx-auto" required placeholder="Enter the result">
+                            </div>
+                        {% endif %}
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Add Business</button>
+                            <a href="{{ url_for('home') }}" class="btn btn-secondary ms-2">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+// Client-side preflight captcha check for add business form.
+(function(){
+    var form = document.getElementById('add-business-form');
+    if (!form) return;
+    form.addEventListener('submit', function(e){
+        try {
+            var captcha = document.getElementById('captcha-input');
+            if (!captcha) return; // nothing to validate
+            e.preventDefault();
+            var data = new URLSearchParams();
+            data.append('captcha', captcha.value || '');
+            fetch('{{ url_for("validate_captcha") }}', {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: data.toString()
+            }).then(function(resp){
+                return resp.json();
+            }).then(function(json){
+                if (json && json.valid) {
+                    // captcha ok -> submit form for real
+                    form.submit();
+                } else {
+                    // show popup and update captcha question if provided
+                    var msg = (json && json.message) ? json.message : 'Incorrect captcha.';
+                    alert(msg);
+                    if (json && json.captcha_question) {
+                        var label = document.getElementById('captcha-label');
+                        if (label) label.textContent = json.captcha_question;
+                    }
+                    if (captcha) captcha.value = '';
+                }
+            }).catch(function(err){
+                console.error('Captcha validation error', err);
+                // On fetch error, fall back to normal submit so server-side will validate
+                form.submit();
+            });
+        } catch (e) {
+            console.error('Preflight captcha check failed', e);
+        }
+    });
+})();
+</script>
+{% endblock %}
