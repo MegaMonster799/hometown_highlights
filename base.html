@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}Hometown Highlights{% endblock %}</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    </head>
+
+    <body>
+        <nav>
+            <ul>
+                <li><a href="/home">Home</a></li>
+                <li><a href="/add_business">Add Business</a></li>
+                <!-- Deals removed from navbar per UI update -->
+                <li><a href="/favorites">Favorites</a></li>
+                <li><a href="/help">Help</a></li>
+                {% if session.get('user_id') %}
+                    <li><a href="/logout">Logout</a></li>
+                {% else %}
+                    <li><a href="/signup">Sign Up</a></li>
+                    <li><a href="/">Login</a></li>
+                {% endif %}
+                <li><a href="/admin/analytics">Admin</a></li>
+            </ul>
+        </nav>
+        {# Render any session-stored error (set by routes before redirecting) #}
+        {% if session.get('error_message') %}
+            <div class="container mt-3">
+                <div class="alert alert-danger">{{ session.pop('error_message') }}</div>
+            </div>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+
+        
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+        
+        <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            try {
+                const y = sessionStorage.getItem('preserveScrollY');
+                if (y) {
+                    window.scrollTo(0, +y);
+                    sessionStorage.removeItem('preserveScrollY');
+                }
+
+                // Attach submit handlers to dropdown/menu forms (filter/sort) and any form with category/sort_by inputs
+                function addPreserveHandler(form) {
+                    if (!form) return;
+                    form.addEventListener('submit', function () {
+                        try { sessionStorage.setItem('preserveScrollY', window.scrollY || window.pageYOffset || 0); } catch (e) {}
+                    });
+                }
+
+                document.querySelectorAll('.dropdown-menu form').forEach(addPreserveHandler);
+                document.querySelectorAll('form').forEach(function (f) {
+                    if (f.querySelector('input[name="category"]') || f.querySelector('input[name="sort_by"]')) {
+                        addPreserveHandler(f);
+                    }
+                });
+            } catch (err) { console.error('scroll-preserve error', err); }
+        });
+        </script>
+
+        
+    </body>
+</html>
