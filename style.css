@@ -1,0 +1,419 @@
+/* ========================================
+   BASE STYLES
+   ======================================== */
+
+body {
+    background-color: #FFDBBB;
+    margin: 0;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+/* ========================================
+   TYPOGRAPHY
+   ======================================== */
+
+h1 {
+    color: black;
+    font-size: 24px;
+    text-align: center;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+h2 {
+    color: black;
+    font-size: 22px;
+    text-align: center;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+h3 {
+    color: black;
+    font-size: 20px;
+    text-align: center;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+h5 {
+    color: black;
+    font-size: 18px;
+    text-align: center;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+/* ========================================
+   NAVIGATION
+   ======================================== */
+
+nav {
+    background-color: #ADEBB3;
+    padding: 10px;
+    text-align: center;
+}
+
+/* Horizontal navigation menu */
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #ADEBB3;
+}
+
+ul li {
+    float: left;
+}
+
+ul li a {
+    display: block;
+    color: black;
+    text-align: center;
+    padding: 14px 76px;
+    text-decoration: none;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+ul li a:hover {
+    background-color: #92DDC8;
+}
+
+/* ========================================
+   FORMS & INPUTS
+   ======================================== */
+
+label {
+    text-align: center;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 16px;
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+/* Search bar styling */
+input[type="search"] {
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+/* Standard text inputs - centered with fixed width */
+input[type="text"] {
+    width: 300px;
+    padding: 5px;
+    margin: 8px 300px;
+    font-size: 16px;
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+input[type="password"] {
+    width: 300px;
+    padding: 5px;
+    margin: 8px 300px;
+    font-size: 16px;
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+/* Smaller inputs for dates and numbers */
+input[type="date"],
+input[type="number"] {
+    width: 100px;
+    padding: 5px;
+    margin: 8px 300px;
+    font-size: 16px;
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+/* Multi-line text areas */
+textarea {
+    width: 300px;
+    padding: 5px;
+    margin: 8px 300px;
+    font-size: 16px;
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+/* ========================================
+   BUTTONS
+   ======================================== */
+
+/* Primary submit buttons */
+button[type="submit"] {
+    background-color: #ADEBB3;
+    color: black;
+    padding: 5px 10px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: block;
+}
+
+/* Dropdown button styling */
+.dropdown button {
+    background-color: #ADEBB3;
+    color: black;
+    padding: 14px 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    position: center;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: block;
+}
+
+/* ========================================
+   LOGIN & SIGNUP SECTIONS
+   ======================================== */
+
+/* Login form buttons */
+.login button {
+    background-color: #ADEBB3;
+    color: black;
+    padding: 5px 10px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+    display: block;
+}
+
+.login button:hover {
+    background-color: #92DDC8;
+}
+
+/* Link to signup page from login */
+.signup-link {
+    text-align: center;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+/* Signup form buttons */
+.signup button {
+    background-color: #ADEBB3;
+    color: black;
+    padding: 5px 10px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+    display: block;
+}
+
+.signup button:hover {
+    background-color: #92DDC8;
+}
+
+/* ========================================
+   BUSINESS CATEGORY IMAGES
+   ======================================== */
+
+/* Food & Beverage category display */
+.foodAndBeverageBusinessImage {
+    display: flex;
+    justify-content: center;
+}
+
+.foodAndBeverageBusinessImage img {
+    width: 300px;
+    height: 300px;
+    margin: 30px;
+}
+
+/* Health & Wellness category display */
+.healthAndWellnessBusinessImage {
+    display: flex;
+    justify-content: center;
+}
+
+.healthAndWellnessBusinessImage img {
+    width: 300px;
+    height: 300px;
+    margin: 30px;
+}
+
+/* ========================================
+   BUSINESS CARDS
+   ======================================== */
+
+/* Individual business card styling */
+.business-card {
+    border-radius: 8px;
+    position: relative;
+}
+
+.business-card .card-body {
+    min-height: 160px;
+}
+
+/* Cards in the main business list */
+.business_list .card {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.business_list .card-img-top {
+    object-fit: cover;
+    height: 160px;
+}
+
+/* Delete button positioned in top-right of business card */
+.delete-business-form {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 10;
+}
+
+/* Circular red delete button with X */
+.delete-business-btn {
+    background-color: #d9534f !important;
+    color: #ffffff !important;
+    border: 0 !important;
+    border-radius: 50% !important;
+    width: 30px !important;
+    height: 30px !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    line-height: 1 !important;
+    cursor: pointer !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+}
+
+.delete-business-btn:hover {
+    background: #c9302c;
+}
+
+/* ========================================
+   STAR RATING DISPLAY
+   ======================================== */
+
+/* 
+ * Two-layer star system for displaying fractional ratings
+ * Background layer shows grey stars, foreground clips to show gold stars
+ */
+.star-rating {
+    display: inline-block;
+    position: relative;
+    font-size: 1rem;
+    line-height: 1;
+    color: #ccc;
+}
+
+.star-rating-back {
+    color: #ccc; /* Unfilled stars */
+}
+
+.star-rating-front {
+    color: #f5b301; /* Filled stars */
+    position: absolute;
+    left: 0;
+    top: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 0; /* Width is set dynamically based on rating */
+}
+
+/* ========================================
+   REVIEWS SECTION
+   ======================================== */
+
+/* Override global ul/li float behavior for reviews - display vertically */
+.review_list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.review_list li {
+    float: none !important;
+    display: block;
+    width: 100%;
+    background: #ffffff;
+    margin-bottom: 0.75rem;
+    padding: 0.75rem;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+/* ========================================
+   BOOTSTRAP OVERRIDES
+   ======================================== */
+
+/* 
+ * Reset button styling inside card footers to match Bootstrap's btn-outline pattern
+ * These overrides are necessary because global button styles conflict with Bootstrap
+ */
+.card-footer form.d-inline > .btn,
+.card-footer .d-flex .btn {
+    display: inline-block !important;
+    margin: 0 !important;
+}
+
+.card-footer .btn {
+    display: inline-block !important;
+    margin: 0 !important;
+    background-color: transparent !important;
+    color: #6c757d !important;
+    border: 1px solid #6c757d !important;
+    padding: .25rem .5rem !important;
+    font-size: .875rem !important;
+    line-height: 1.5 !important;
+    border-radius: .2rem !important;
+}
+
+/* Specific color overrides for Bootstrap button variants */
+.card-footer .btn.btn-outline-success {
+    color: #198754 !important;
+    border-color: #198754 !important;
+}
+
+/* Utility: equal-height buttons with centered labels */
+.btn-equal {
+    min-height: 40px;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding-top: 0.35rem !important;
+    padding-bottom: 0.35rem !important;
+}
+
+.card-footer .btn.btn-outline-info {
+    color: #0dcaf0 !important;
+    border-color: #0dcaf0 !important;
+}
+
+.card-footer .btn.btn-outline-secondary {
+    color: #6c757d !important;
+    border-color: #6c757d !important;
+}
