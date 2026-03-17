@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Reviews for {{ business.name }}{% endblock %}
+{% block content %}
+        <div class="reviews container-fluid">
+            <h2 class="mb-4">Reviews for {{ business.name }}</h2>
+            <div class="mb-3 d-flex justify-content-center">
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Sort by...
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <form method="POST" action="{{ url_for('view_reviews', business_id=business.id) }}">
+                                <input type="hidden" name="sort_by" value="Newest">
+                                <button type="submit" class="dropdown-item">Newest</button>
+                            </form>
+                        </li>
+                        <li>
+                            <form method="POST" action="{{ url_for('view_reviews', business_id=business.id) }}">
+                                <input type="hidden" name="sort_by" value="Oldest">
+                                <button type="submit" class="dropdown-item">Oldest</button>
+                            </form>
+                        </li>
+                        <li>
+                            <form method="POST" action="{{ url_for('view_reviews', business_id=business.id) }}">
+                                <input type="hidden" name="sort_by" value="Highest Rating">
+                                <button type="submit" class="dropdown-item">Highest Rating</button>
+                            </form>
+                        </li>
+                        <li>
+                            <form method="POST" action="{{ url_for('view_reviews', business_id=business.id) }}">
+                                <input type="hidden" name="sort_by" value="Lowest Rating">
+                                <button type="submit" class="dropdown-item">Lowest Rating</button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            {% if reviews %}
+                {% for review in reviews %}
+                    <div class="card mb-4 w-100">
+                        <div class="card-body">
+                            <h3 class="display-6 mb-1">{{ review.reviewer_name or 'Anonymous' }}</h3>
+                            <h4 class="h5 text-muted mb-2">{{ review.title or '' }}</h4>
+                            <div aria-label="Rating: {{ review.rating }} out of 5" class="mb-3">
+                                <span class="text-warning" style="font-size:1.25rem;">
+                                    {% for i in range(1,6) %}
+                                        {% if review.rating and i <= review.rating %}&#9733;{% else %}&#9734;{% endif %}
+                                    {% endfor %}
+                                </span>
+                                <span class="ms-2 text-muted">{{ review.rating or 0 }}/5</span>
+                            </div>
+                            <p class="card-text">{{ review.comment }}</p>
+                        </div>
+                        {# admin delete removed; no footer actions #}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No reviews yet. Be the first to review this business. Click <a href="{{ url_for('add_review', business_id=business.id) }}">here</a> to add a review!</p>
+            {% endif %}
+        </div>
+{% endblock %}
